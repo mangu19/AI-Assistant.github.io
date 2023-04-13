@@ -24,16 +24,19 @@
 
 
     <div class="container my-3 shadow p-3 mb-5 my-3 bg-body-tertiary rounded " style="width: 70%;">
-        
+       
         <div class="row g-2 text-center " >
             <div class="col-sm-7">
-              <input type="text" class="form-control " placeholder="Ask me a question" id="promt" aria-label="Insert Question">
+              <input type="text" class="form-control " placeholder="Ask me a question" autocomplete="off" id="promt" aria-label="Insert Question">
             </div>
             <div class="col">
-                <button class="btn btn-success  col-md-4 mx-3" onclick="callAPI()">Submit</button>
+                <button class="btn btn-success  col-md-4 mx-3" id="submit"  onclick="callAPI()">Submit</button>
+                <button class="btn col-md-4 mx-3 btn-secondary" onclick="reset()" >Reset</button>
+                
             </div>
             
           </div>
+        
                  
     </div>
     <div class="m-auto w-100 text-center" id="element" style="display:none;" >
@@ -51,19 +54,18 @@
     <script>
         const promt=document.getElementById("promt");
         const results=document.getElementById("results");
-        let p="";
+        
+        function reset(){
+            promt.value=('')
+        }
        
        
         function callAPI(){
             document.getElementById("element").style.display = "block";
-           // setTimeout(document.getElementById("element").style.display = "inline",5000);
-          // setTimeout(function(){
-
-           // document.getElementById("element").style.display = "none";
-       // }, 6000);
+            document.getElementById("submit").disabled = true; 
             const options = {
-	method: 'POST',
-	headers: {
+	        method: 'POST',
+	    headers: {
 		'content-type': 'application/json',
 		'X-RapidAPI-Key': 'f62325a013msh84ded81c455b75ap1fcd35jsn4d7915bdbb95',
 		'X-RapidAPI-Host': 'openai80.p.rapidapi.com'
@@ -75,13 +77,12 @@
 fetch('https://openai80.p.rapidapi.com/chat/completions', options)
 
 	.then(response => response.json())
-	.then(response => results.innerText=response.choices[0].message.content
-    )  //results.innerText=response.choices[0].massage.content
+	.then(response => results.innerText=response.choices[0].message.content ) 
+    .then(response =>document.getElementById("element").style.display = "none") 
+    .then(response =>document.getElementById("submit").disabled = false) 
     .catch(err => console.error(err));
-   
     
-    document.getElementById("element").style.display = "none";
-        }
+    }
 
     </script>
 </body>
